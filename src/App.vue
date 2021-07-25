@@ -1,28 +1,48 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <Titulo/>
+    <label >Tarea</label>
+    <input type="text" placeholder="Agregar nueva tarea" v-model="nuevaTarea"/>
+    <button @click="agregarTarea()">Crear</button>
+
+    <h2>Lista</h2>
+    <ul>
+<li v-for="(tarea, $index) in tareas" :key="$index">
+        <div v-if="!tarea.modificable">{{ $index }}: {{ tarea.texto }}</div>
+        <input v-if="tarea.modificable" type="text" v-model="tarea.texto" />
+        <button @click="modificar(tarea)">M</button>
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
-
+import Titulo from '@/components/Titulo.vue'
 export default {
-  name: "App",
+  name: 'App',
   components: {
-    HelloWorld,
+    Titulo,
   },
-};
+  data: () => ({
+    nuevaTarea: '',
+    tareas: [],
+  }),
+  methods: {
+    agregarTarea() {
+      this.tareas.push({ texto: this.nuevaTarea, modificable: false })
+      this.nuevaTarea = ''
+    },
+    modificar(tarea) {
+      if (!tarea.modificable) {
+        tarea.modificable = true
+      } else {
+        tarea.modificable = false
+      }
+    },
+  },
+}
 </script>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style>
+
 </style>
